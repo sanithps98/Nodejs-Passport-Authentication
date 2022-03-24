@@ -4,6 +4,7 @@ const user = require('../model/user');
 const bcryptjs = require('bcryptjs');
 const passport = require('passport');
 require('./passportLocal')(passport);
+require('./googleAuth')(passport);
 
 function checkAuth(req, res, next){
     if(req.isAuthenticated()){
@@ -95,8 +96,13 @@ router.get('/logout', (req, res) => {
     });
 });
 
+router.get('/google', passport.authenticate('google', { scope : ['profile', 'email', ]}));
 
-//Only if a user is authenticated, them only they can visit this route
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+    res.redirect('/profile');
+});
+
+//Only if a user is authenticated, then only they can visit this route
 router.get('/profile', checkAuth, (req, res) => {
     // adding a new parameter for checking verification
     res.render('profile', { username : req.user.username, verified : req.user.isVerified });
