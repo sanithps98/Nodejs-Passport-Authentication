@@ -13,7 +13,7 @@ function checkAuth(req, res, next){
         next();
     }
     else{
-        //If not authenticated - redirect to home route/home page
+        //If not authenticated - redirect to login page
         req.flash('error_messages', "Please Login to continue !");
         res.redirect('/login');
     }
