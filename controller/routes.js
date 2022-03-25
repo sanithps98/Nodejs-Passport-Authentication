@@ -6,14 +6,16 @@ const passport = require('passport');
 require('./passportLocal')(passport);
 require('./googleAuth')(passport);
 
+//Checking the authentication of the route
 function checkAuth(req, res, next){
     if(req.isAuthenticated()){
         res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, post-check=0, pre-check=0');
         next();
     }
     else{
+        //If not authenticated - redirect to home route/home page
         req.flash('error_messages', "Please Login to continue !");
-        res.redirect('/');
+        res.redirect('/login');
     }
 }
 router.get('/', (req, res) => {
